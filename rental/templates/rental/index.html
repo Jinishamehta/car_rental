@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    {% for entry in data %}
+        <p>{{ entry }}</p>
+    {% endfor %}
+
+    {% if request.user.is_staff %}
+        <a href="{% url 'customer_page' %}">Customers</a>
+        <a href="{% url 'class_page'%}">Class</a>
+        <a href="{% url 'vehicle_page'%}">Vehicle</a>
+        <a href="{% url 'location_page'%}">Location</a>
+        <a href="{% url 'discount_page'%}">Discount</a>
+        <a href="{% url 'service_page'%}">Service</a>
+        <a href="{% url 'plan_page'%}">Plan</a>
+        <a href="{% url 'invoice_page'%}">Invoice</a>
+        <a href="{% url 'payment_page'%}">Payment</a>
+        <a href="{% url 'company_page'%}">Company</a>
+        {% if request.user.is_superuser%}
+            <a href="{% url 'employee_page' %}">Employee</a>
+    {% endif %}
+    {% endif %}
+    
+</div>
+
+{% endblock content %}
