@@ -18,4 +18,16 @@ urlpatterns = [
     path('create_payment', views.createPayment, name='create_payment'),
     path('register',views.registerPage,name='register_user'),
     path('register_employee', views.registerEmployee, name='register_employee'),
+
+    path('view_customer', views.listCustomer, name="customer_page"),
+    path('view_class',views.listClass,name='class_page'),
+    path('view_vehicle',views.listVehicle,name='vehicle_page'),
+    path('view_locaiton',views.listLocation,name='location_page'),
+    path('view_disocunt',views.listDiscount,name='discount_page'),
+    path('view_serivce',views.listService,name='service_page'),
+    path('view_plan',views.listPlan,name='plan_page'),
+    path('view_invoice',views.listInvoice,name='invoice_page'),
+    path('view_payment',views.listPayment,name='payment_page'),
+    path('view_company',views.listCompany,name='company_page'),
+    path('view_employee',views.listEmployee,name='employee_page'),
 ]

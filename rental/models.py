@@ -90,7 +90,7 @@ class rsj_vehicle(models.Model):
     location_id = models.ForeignKey(rsj_location, on_delete=models.CASCADE, db_column= 'location_id')
 
     def __str__(self):
-        return self.car_lpn
+        return self.lpn
 
     class Meta:
         db_table = 'rsj_vehicle'

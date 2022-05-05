@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission, Group
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import get_user_model
 from .form import *
 from .models import *
 
@@ -48,6 +49,8 @@ def registerPage(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save() 
+            my_group = Group.objects.get(name='customer')
+            my_group.user_set.add(user)
             return redirect('login')
         else:
             messages.error(request, 'An error occured during registration')
@@ -59,6 +62,7 @@ def registerPage(request):
 @permission_required('rental.add_user')
 def registerEmployee(request):
     form = RegisterEmployee()
+    codename = ['add_rsj_service', 'edit_rsj_service', 'de']
     permission = Permission.objects.get(codename='add_rsj_service')
     if request.method == 'POST':            
         form = RegisterEmployee(request.POST)
@@ -66,7 +70,8 @@ def registerEmployee(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save() 
-            user.user_permissions.add(permission)
+            my_group = Group.objects.get(name='customer')
+            my_group.user_set.add(user)
             return redirect('index')
         else:
             messages.error(request, 'An error occured during registration')
@@ -214,3 +219,58 @@ def createPayment(request):
     context = {'form':form}
     return render(request,'rental/create.html', context)
 
+def listCustomer(request):
+    data = rsj_customer.objects.raw('select * from rsj_customer')
+    context = {'data':data}
+    return render(request,'rental/customer.html',context)
+
+def listClass(request):
+    data = rsj_vehicle_class.objects.raw('select * from rsj_vehicle_class')
+    context = {'data':data}
+    return render(request,'rental/vehicle_class.html',context)
+
+def listVehicle(request):
+    data = rsj_vehicle.objects.raw('select * from rsj_vehicle')
+    context = {'data':data}
+    return render(request,'rental/vehicle.html',context)
+
+def listLocation(request):
+    data = rsj_location.objects.raw('select * from rsj_location')
+    context = {'data':data}
+    return render(request,'rental/location.html',context)
+
+def listDiscount(request):
+    data = rsj_discount.objects.raw('select * from rsj_discount')
+    context = {'data':data}
+    return render(request,'rental/discount.html',context)
+
+def listService(request):
+    data = rsj_service.objects.raw('select * from rsj_service')
+    context = {'data':data}
+    return render(request,'rental/service.html',context)
+
+def listPlan(request):
+    data = rsj_plan.objects.raw('select * from rsj_plan')
+    context = {'data':data}
+    return render(request,'rental/plan.html',context)
+
+def listInvoice(request):
+    data = rsj_invoice.objects.raw('select * from rsj_invoice')
+    context = {'data':data}
+    return render(request,'rental/invoice.html',context)
+
+def listPayment(request):
+    data = rsj_payment.objects.raw('select * from rsj_payment')
+    context = {'data':data}
+    return render(request,'rental/payment.html',context)
+
+def listCompany(request):
+    data = rsj_company.objects.raw('select * from rsj_company')
+    context = {'data':data}
+    return render(request,'rental/company.html',context)
+
+def listEmployee(request):
+    rental_user = get_user_model()
+    data = rental_user.objects.raw('select * from rental_user where is_staff = 1')
+    context = {'data':data}
+    return render(request,'rental/employee.html',context)

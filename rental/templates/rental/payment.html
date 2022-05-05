@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    {% for entry in data %}
+        <p>{{ entry }}</p>
+    {% endfor %}    
+    <a href="{% url 'create_payment' %}">Make Payment</a>
+</div>
+
+{% endblock content %}
