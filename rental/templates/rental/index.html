@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    {% for vehicle in data %}
+        <p>{{ vehicle.vin }}</p>
+    {% endfor %}
+
+    {% if request.user.is_staff %}
+        <a href="{% url 'register_user' %}">Create Customer</a>
+        {% if request.user.is_superuser%}
+        <a href="{% url 'register_employee' %}">Create Employee</a>
+    {% endif %}
+    {% endif %}
+    
+</div>
+
+{% endblock content %}
