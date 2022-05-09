@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<main class="auth layout">
+    <div class="container">
+        <div>
+            <div class="layout__boxHeader">
+                <div class="layout__boxTitle">
+                    <h3>Customer Type</h3>
+                </div>
+            </div>
+                <div class="layout__body">
+
+                    <form class="form" method="POST">
+                        {% csrf_token %}
+                        {% if type == 'C'%}
+                            {{ form.as_p }}
+                            {{ form1.as_p }}
+                        {% elif type == 'I' %}
+                            {{ form.as_p }}
+                            {{ form2.as_p }}
+                        {% endif %}
+                        <input class="btn btn--main" type="submit" value="register" />
+                    </form>
+                </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

@@ -1,12 +1,66 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
+<div class="card mb-4">
+    <div class="card-header">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>
+                {{message}}
+            </li>
+            {% endfor %}
+        </ul>
+    
+        {% endif %}
+        <i class="fas fa-table me-1"></i>
+        Location  <a href="{% url 'create_location' %}">Add</a>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Pincode</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Pincode</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for entry in data %}
+                <tr>
+                    <td>{{ entry.street }}</td>
+                    <td>{{ entry.city }}</td>
+                    <td>{{ entry.state }}</td>
+                    <td>{{ entry.pincode }}</td>
+                    <td>{{ entry.phone_no }}</td>
+                    <td>
+                        <a href="{% url 'update_location'  entry.location_id %}">Update</a>
+                        <a href="{% url 'delete_location' entry.location_id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}  
+            </tbody>
+        </table>
+       
+      
+ 
+</div>
 <div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}  
-    <a href="{% url 'create_location' %}">Add Location</a>  
+    
 </div>
 
 {% endblock content %}

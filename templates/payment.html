@@ -1,0 +1,27 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<main class="auth layout">
+    <div class="container">
+        <div>
+            <div class="layout__boxHeader">
+                <div class="layout__boxTitle">
+                    <h3>Payment</h3>
+                </div>
+            </div>
+                <div class="layout__body">
+                    <form class="form" method="POST" action="">
+                        {% csrf_token %}
+                        {% for f in form %}
+                            <div class="form__group">
+                            <label>{{f.label}}</label>
+                            {{f}}
+                            </div>
+                        {% endfor %}
+                        <input class="btn btn--main" type="submit" value="Pay" />
+                    </form>
+                </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

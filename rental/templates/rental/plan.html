@@ -1,12 +1,41 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}   
-    <a href="{% url 'create_plan' %}">Add Plan</a> 
-</div>
+<a href="{% url 'create_plan' %}">Add</a>
+<table id="datatablesSimple">
+    <thead>
+        <tr>
+            <th>Plan ID</th>
+            <th>Plan</th>
+            <th>Cost</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Plan ID</th>
+            <th>Plan</th>
+            <th>Cost</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.plan_id }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.cost}}</td>
+            <td>{{ entry.description}}</td>
+            <td>
+                <a href="{% url 'update_plan'  entry.plan_id  %}">Update</a>
+                <a href="{% url 'delete_plan' entry.plan_id  %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
 
 {% endblock content %}

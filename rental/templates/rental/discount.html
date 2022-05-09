@@ -1,13 +1,43 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}  
-    
-    <a href="{% url 'create_discount' %}">Add Discount</a>
-</div>
-
+<a href="{% url 'create_discount' %}">Add</a>
+<table id="datatablesSimple">
+    <thead>
+        <tr>
+            <th>Coupon Code</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Rate</th>
+            <th>Used</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Coupon Code</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Rate</th>
+            <th>Used</th>
+            <th>Actions</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.coupon_code }}</td>
+            <td>{{ entry.start_date }}</td>
+            <td>{{ entry.end_date}}</td>
+            <td>{{ entry.rate }}</td>
+            <td>{{ entry.used }}</td>
+            <td>
+                <a href="{% url 'update_discount'  entry.coupon_code %}">Update</a>
+                <a href="{% url 'delete_discount' entry.coupon_code %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
 {% endblock content %}

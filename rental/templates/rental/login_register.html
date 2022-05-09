@@ -1,33 +1,72 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
+<div class="error_messages">
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li id="message">alert{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 {% if page == 'login' %}
 <div>
-    <form action="" method="POST">
+    <form action=""  method="POST" >
         {% csrf_token %}
-
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username">
-
-        <label> Password </label>
-        <input type="password" name="password" placeholder="Enter Password">
-
-        <input type="submit" value="login">
+      <h1>Login</h1>
+      <div class="formcontainer">
+      <hr/>
+      <div class="container">
+        <label for="username"><strong>Username</strong></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+        <label for="password"><strong>Password</strong></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+      <div class="container" style="background-color: #eee">
+        <label style="padding-left: 15px">
+        <a href="{% url 'register_user' %}">Sign Up</a>
+        <span class="password"><a href="#"> Forgot password?</a></span>
+      </div>
     </form>
-
-    <p>Haven't Signed up yet ?</p>
-    <a href="{% url 'register_user' %}">Sign Up</a>
 </div>
 {% else %}
 <div>
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register">
+        <!-- {{ form.as_p }}
+        <!-- <button type="submit">Register</button> -->
+        <h1>Registation</h1>
+      <div class="formcontainer">
+      <hr/>
+      <div class="container">
+        <label for="id_first_name">First name:</label>
+        <input type="text" name="first_name" maxlength="150" id="id_first_name">
+
+        <label for="id_last_name">Last name:</label>
+        <input type="text" name="last_name" maxlength="150" id="id_last_name">
+
+        <label for="id_username">Username:</label>
+        <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username">
+
+        <label for="id_email">Email address:</label>
+        <input type="email" name="email" maxlength="254" id="id_email">
+
+        <label for="id_password1">Password:</label>
+        <input type="password" name="password1" autocomplete="new-password" required="" id="id_password1">
+
+        <label for="id_password2">Password confirmation:</label>
+        <input type="password" name="password2" autocomplete="new-password" required="" id="id_password2">
+
+    </div>
+    <button type="submit">Register</button>
+    <div class="container" style="background-color: #eee">
+        <label style="padding-left: 15px">
+        <a href="{% url 'login' %}">Sign In</a>
+      </div>
     </form>
-    <p>Already Signed Up</p>
-    <a href="{% url 'login' %}">Sign In</a>
 </div>
 
 {% endif %}

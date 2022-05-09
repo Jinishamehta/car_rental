@@ -1,27 +1,20 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}
 
-    {% if request.user.is_staff %}
-        <a href="{% url 'customer_page' %}">Customers</a>
-        <a href="{% url 'class_page'%}">Class</a>
-        <a href="{% url 'vehicle_page'%}">Vehicle</a>
-        <a href="{% url 'location_page'%}">Location</a>
-        <a href="{% url 'discount_page'%}">Discount</a>
-        <a href="{% url 'service_page'%}">Service</a>
-        <a href="{% url 'plan_page'%}">Plan</a>
-        <a href="{% url 'invoice_page'%}">Invoice</a>
-        <a href="{% url 'payment_page'%}">Payment</a>
-        <a href="{% url 'company_page'%}">Company</a>
-        {% if request.user.is_superuser%}
-            <a href="{% url 'employee_page' %}">Employee</a>
-    {% endif %}
-    {% endif %}
+<div class="main">
+  <h2>Sidebar</h2>
+  <p>This sidebar is of full height (100%) and always shown.</p>
+  <p>Scroll down the page to see the result.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+</div> 
+
+<div>
+    
     
 </div>
 

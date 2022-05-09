@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<main class="auth layout">
+    <div class="container">
+        <div class="layout__box">
+            <div class="layout__boxHeader">
+                <div class="layout__boxTitle">
+                    <h3>Customer Type</h3>
+                </div>
+            </div>
+                <div class="layout__body">
+                    <form class="form" method="POST">
+                        {% csrf_token %}
+                        <div class="form__group">
+                            <label>Customer Type</label>
+                            <input class="btn btn--main" type="text" name="csttype" />
+                        </div>
+
+                        <input type="submit" value="login" />
+                    </form>
+                </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

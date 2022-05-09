@@ -1,13 +1,50 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
 
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}    
-
-    <a href="{% url 'create_class' %}">Add Class</a>
+<div class="card-header">
+    <i>Class</i>
+    <div class="topnav-right">
+    <a href="{% url 'create_class' %}">Add</a>
 </div>
-
+</div>
+<div class="card-body">
+       
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Rate Per Day</th>
+                    <th>Over Mileage Fees</th>
+                    <th>Daily Limit</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Class</th>
+                    <th>Rate Per Day</th>
+                    <th>Over Mileage Fees</th>
+                    <th>Daily Limit</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for entry in data %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.rate_per_day }}</td>
+                    <td>{{ entry.over_mileage_fee }}</td>
+                    <td>{{ entry.daily_limit }}</td>
+                    <td>
+                        <a href="{% url 'update_class'  entry.class_id %}">Update</a>
+                        <a href="{% url 'delete_class' entry.class_id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}  
+            </tbody>
+        </table>
+    </div>
+    </div>
+    
 {% endblock content %}

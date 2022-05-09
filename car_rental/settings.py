@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'car_rental.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'car_rental',
+        'NAME': 'car_rental_2',
         'USER': 'root',
         'PASSWORD': 'Jinisha8',
         'PORT': '3306',
@@ -128,9 +128,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'rental.User'
+# AUTH_USER_MODEL = 'rental.User'

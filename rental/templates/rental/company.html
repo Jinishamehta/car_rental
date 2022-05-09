@@ -1,13 +1,36 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
-
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %} 
-    
-    <a href="{% url 'create_company' %}">Add Company</a>
-</div>
-
+<a href="{% url 'create_company' %}">Add</a>
+<table id="datatablesSimple">
+    <thead>
+        <tr>
+            <th>Reg_no</th>
+            <th>Company Name</th>
+            <th>Discount Rate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Reg_no</th>
+            <th>Company Name</th>
+            <th>Discount Rate</th>
+            <th>Actions</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.company_reg_no }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.discount_rate}}</td>
+            <td>
+                <a href="{% url 'update_company'  entry.company_reg_no %}">Update</a>
+                <a href="{% url 'delete_company' entry.company_reg_no %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
 {% endblock content %}

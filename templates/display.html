@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+{% block content%}
+<div class="layout__boxHeader">
+    <div class="layout__boxTitle">
+        <h3>Service Details</h3>
+    </div>
+</div>
+</div>
+<main class="container">
+<div>
+    <table border = 1>
+        <tr>
+            <th>    Service ID    </th>
+            <th>    Start Location  </th>
+            <th>    End Location    </th>
+            <th>    Invoice  </th>
+        </tr>
+        {% for a in service %}
+            <tr>
+                <td>{{a.service_id}}</td>
+                <td>{{a.start_location}}</td>
+                <td>{{a.end_location_id}}</td>
+                {% if a.coupon_code %}
+                <td><a href="{% url 'invoice' var1=a.service_id var2=a.coupon_code.coupon_code %}" class="btn btn--link">generateInvoice</a></td>
+                {% else %}
+                <td><a href="{% url 'invoice' var1=a.service_id var2='0' %}" class="btn btn--link">generateInvoice</a></td>
+                {% endif %}
+            </tr>
+            
+        {% endfor %}
+    </table>
+    
+</div>
+</main>
+
+{% endblock %}

@@ -2,20 +2,21 @@ from string import digits
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.forms import ValidationError
+
 
 
 # Create your models here.
 
-class User(AbstractUser):
+# class User(AbstractUser):
 
-    class Meta(AbstractUser.Meta):
-        swappable = 'AUTH_USER_MODEL'
+#     class Meta(AbstractUser.Meta):
+#         swappable = 'AUTH_USER_MODEL'
 
 class rsj_vehicle_class(models.Model):
     class_id = models.AutoField(primary_key=True, validators=[MaxValueValidator(999), MinValueValidator(1)],)
-    name = models.CharField(max_length=30, unique=True, null=False)
+    name = models.CharField(max_length=30, unique=True)
     rate_per_day = models.DecimalField(max_digits=5, decimal_places=2, null=False, validators=[MaxValueValidator(999.00), MinValueValidator(1.00)] )
     over_mileage_fee = models.DecimalField(max_digits=5, decimal_places=2,  validators=[MaxValueValidator(999.00), MinValueValidator(1.00)], null=False)
     daily_limit = models.DecimalField(max_digits=7, decimal_places=2,  validators=[MaxValueValidator(99999.00), MinValueValidator(1.00)], null=False)
@@ -34,7 +35,7 @@ class rsj_location(models.Model):
     city = models.CharField(max_length=30, null=False)
     state = models.CharField(max_length=30, null=False)
     pincode = models.CharField(max_length=5, validators=[RegexValidator(regex='^[0-9]{5}$')], null=False)
-    phone_no = models.BigIntegerField(validators=[RegexValidator(regex='^[0-9]{10}$')], null=False)
+    phone_no = models.CharField(max_length=10,validators=[RegexValidator(regex='^[0-9]{10}$')], null=False)
 
     def __str__(self):
         return self.street
@@ -96,32 +97,121 @@ class rsj_vehicle(models.Model):
         db_table = 'rsj_vehicle'
 
 class rsj_customer(models.Model):
-    # TYPE_INDIVIDUAL = 'individual'
-    # TYPE_CORPORATE = 'virtual'
-    # TYPE_CHOICES = (
-    #     (TYPE_INDIVIDUAL, 'individual'),
-    #     (TYPE_CORPORATE, 'virtual'),
-    # )
-    # customer_type = models.CharField(
-    #     max_length=20,
-    #     choices=TYPE_CHOICES,
-    # )
-
+    username = models.OneToOneField(User, on_delete=models.CASCADE, db_column = 'username')
     customer_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    street = models.CharField(max_length=50, null=False)
-    city = models.CharField(max_length=30, null=False)
-    state = models.CharField(max_length=30, null=False)
-    pincode = models.CharField(max_length=5, validators=[RegexValidator(regex='^[0-9]{5}$')], null=False)
-    phone_no = models.IntegerField(validators=[RegexValidator(regex='^[0-9]{10}$')], null=False)
-    email = models.EmailField(max_length=150)
-    driver_license =  models.CharField(max_length=19, validators=[RegexValidator(regex='^[A-Za-z0-9]{19}$')])
-    # is_employee = models.BooleanField(default=False)
+    type = models.CharField(max_length=1)
+    fname = models.CharField(max_length=30)
+    lname = models.CharField(max_length=30)
+    street = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    zipcode = models.CharField(max_length=5)
+    state = models.CharField(max_length=30)
+    email = models.CharField(max_length=50)
+    phone_no = models.BigIntegerField()
+    dr_lno = models.CharField(max_length=19)
+    
+    def __str__(self) -> str:
+        return self.username
+
+    #USERNAME_FIELD = 'customer_id'
 
     class Meta:
+        # managed = False
         db_table = 'rsj_customer'
+
+class rsj_corp_cst(models.Model):
+    customer = models.OneToOneField('rsj_customer', models.DO_NOTHING, primary_key=True)
+    reg_no = models.ForeignKey(rsj_company, models.DO_NOTHING, db_column='reg_no')
+    emp_id = models.CharField(max_length=10)
+
+    class Meta:
+        # managed = False
+        db_table = 'rsj_corp_cst'
+
+class rsj_ind_cst(models.Model):
+    customer = models.OneToOneField('rsj_customer', models.DO_NOTHING, primary_key=True)
+    policy_no = models.CharField(max_length=13)
+    insurance_name = models.CharField(max_length=50)
+
+    class Meta:
+        # managed = False
+        db_table = 'rsj_ind_cst'
+        unique_together = (('customer', 'policy_no'),)
+
+
+class rsj_invoice(models.Model):
+    invoice_id = models.IntegerField(primary_key=True)
+    service = models.ForeignKey('rsj_service', models.DO_NOTHING)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    invoice_date = models.DateTimeField(auto_now_add=True)
+    pendng_amt = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        # managed = False
+        db_table = 'rsj_invoice'
+
+class rsj_payment(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+    invoice = models.ForeignKey(rsj_invoice, models.DO_NOTHING)
+    method = models.CharField(max_length=4)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    date = models.DateTimeField(db_column='DATE')  # Field name made lowercase.
+    card_no = models.BigIntegerField()
+    name_on_card = models.CharField(max_length=30)
+    exp_date = models.DateTimeField()
+
+    class Meta:
+        # managed = False
+        db_table = 'rsj_payment'
+
+
+class rsj_service(models.Model):
+    service_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(rsj_customer, models.DO_NOTHING)
+    vin = models.ForeignKey('rsj_vehicle', models.DO_NOTHING, db_column='vin')
+    service_type = models.ForeignKey('rsj_plan', models.DO_NOTHING, db_column='service_type')
+    start_location = models.ForeignKey('rsj_location', models.DO_NOTHING, related_name='%(class)s_s_location', db_column='start_location')
+    end_location_id = models.ForeignKey('rsj_location', models.DO_NOTHING, related_name='%(class)s_e_location', db_column='end_location_id')
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    coupon_code = models.ForeignKey(rsj_discount, models.DO_NOTHING, db_column='coupon_code', null=True)
+    odometer_start = models.IntegerField()
+    odometer_end = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        # managed = False
+        db_table = 'rsj_service'
+
+# class rsj_customer(models.Model):
+#     # TYPE_INDIVIDUAL = 'individual'
+#     # TYPE_CORPORATE = 'virtual'
+#     # TYPE_CHOICES = (
+#     #     (TYPE_INDIVIDUAL, 'individual'),
+#     #     (TYPE_CORPORATE, 'virtual'),
+#     # )
+#     # customer_type = models.CharField(
+#     #     max_length=20,
+#     #     choices=TYPE_CHOICES,
+#     # )
+
+#     customer_id = models.AutoField(primary_key=True)
+#     first_name = models.CharField(max_length=30)
+#     middle_name = models.CharField(max_length=30)
+#     last_name = models.CharField(max_length=30)
+#     street = models.CharField(max_length=50, null=False)
+#     city = models.CharField(max_length=30, null=False)
+#     state = models.CharField(max_length=30, null=False)
+#     pincode = models.CharField(max_length=5, validators=[RegexValidator(regex='^[0-9]{5}$')], null=False)
+#     phone_no = models.IntegerField(validators=[RegexValidator(regex='^[0-9]{10}$')], null=False)
+#     email = models.EmailField(max_length=150)
+#     driver_license =  models.CharField(max_length=19, validators=[RegexValidator(regex='^[A-Za-z0-9]{19}$')])
+#     # is_employee = models.BooleanField(default=False)
+
+#     class Meta:
+#         db_table = 'rsj_customer'
+
+#     def __str__(self):
+#         return self.first_name
 
     # def clean(self) -> None:
     #     if self.customer_type == rsj_customer.TYPE_INDIVIDUAL:
@@ -147,64 +237,64 @@ class rsj_customer(models.Model):
     #     else:
     #         assert False, f'Unknown Customer Type "{self.customer_type}"'
 
-class rsj_ind_cust(rsj_customer):
-    policy_no = models.CharField(max_length=13, null=True)
-    insurance_name = models.CharField(max_length=50, null=True)
+# class rsj_ind_cust(rsj_customer):
+#     policy_no = models.CharField(max_length=13, null=True)
+#     insurance_name = models.CharField(max_length=50, null=True)
 
-    class Meta():
-        db_table = 'rsj_ind_cust'
+#     class Meta():
+#         db_table = 'rsj_ind_cust'
 
-class rsj_corp_cust(rsj_customer):
-    company_reg_no = models.ForeignKey(rsj_company, on_delete=models.RESTRICT, null=True, db_column= 'company_reg_no')
-    emp_id = models.CharField(max_length=10, null=True)
+# class rsj_corp_cust(rsj_customer):
+#     company_reg_no = models.ForeignKey(rsj_company, on_delete=models.DO_NOTHING, null=True, db_column= 'company_reg_no')
+#     emp_id = models.CharField(max_length=10, null=True)
 
-    class Meta():
-        db_table = 'rsj_corp_cust'
+#     class Meta():
+#         db_table = 'rsj_corp_cust'
 
-class rsj_service(models.Model):
-    service_id = models.AutoField(primary_key=True, validators=[MaxValueValidator(9999999), MinValueValidator(1)])
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    start_meter = models.DecimalField(max_digits=7, decimal_places=2)
-    end_meter = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+# class rsj_service(models.Model):
+#     service_id = models.AutoField(primary_key=True, validators=[MaxValueValidator(9999999), MinValueValidator(1)])
+#     start_date = models.DateTimeField()
+#     end_date = models.DateTimeField()
+#     start_meter = models.DecimalField(max_digits=7, decimal_places=2)
+#     end_meter = models.DecimalField(max_digits=7, decimal_places=2, null=True)
 
-    customer_id = models.ForeignKey(rsj_customer, on_delete=models.RESTRICT, db_column= 'customer_id')
-    vin = models.ForeignKey(rsj_vehicle, on_delete=models.RESTRICT, db_column= 'vin')
-    plan_id = models.ForeignKey(rsj_plan, on_delete=models.RESTRICT, db_column= 'plan_id')
-    start_location = models.ForeignKey(rsj_location, on_delete=models.RESTRICT, related_name='start', db_column= 'start_location')
-    end_location = models.ForeignKey(rsj_location, on_delete=models.RESTRICT, related_name='end', db_column= 'end_location')
-    coupon_code = models.ForeignKey(rsj_discount, on_delete=models.RESTRICT, db_column= 'coupon_code')
+#     customer_id = models.ForeignKey(rsj_customer, on_delete=models.RESTRICT, db_column= 'customer_id')
+#     vin = models.ForeignKey(rsj_vehicle, on_delete=models.RESTRICT, db_column= 'vin')
+#     plan_id = models.ForeignKey(rsj_plan, on_delete=models.RESTRICT, db_column= 'plan_id')
+#     start_location = models.ForeignKey(rsj_location, on_delete=models.RESTRICT, related_name='start', db_column= 'start_location')
+#     end_location = models.ForeignKey(rsj_location, on_delete=models.RESTRICT, related_name='end', db_column= 'end_location')
+#     coupon_code = models.ForeignKey(rsj_discount, on_delete=models.RESTRICT, db_column= 'coupon_code')
 
-    class Meta:
-        db_table = 'rsj_service'
+#     class Meta:
+#         db_table = 'rsj_service'
 
-class rsj_invoice(models.Model):
-    invoice_id = models.AutoField(primary_key=True)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
-    invoice_date = models.DateTimeField()
-    pending_amount = models.DecimalField(max_digits=7, decimal_places=2, default=amount)
+# class rsj_invoice(models.Model):
+#     invoice_id = models.AutoField(primary_key=True)
+#     amount = models.DecimalField(max_digits=7, decimal_places=2)
+#     invoice_date = models.DateTimeField()
+#     pending_amount = models.DecimalField(max_digits=7, decimal_places=2, default=amount)
 
-    service_id = models.ForeignKey(rsj_service,on_delete=models.RESTRICT, db_column= 'service_id')
+#     service_id = models.ForeignKey(rsj_service,on_delete=models.RESTRICT, db_column= 'service_id')
 
-    class Meta:
-        db_table = 'rsj_invoice'
+#     class Meta:
+#         db_table = 'rsj_invoice'
 
-class rsj_payment(models.Model):
-    CARD = 'CARD'
-    CASH = 'CASH'
-    payment_id = models.AutoField(primary_key=True)
-    method = models.CharField(
-        max_length=4,
-        choices = ((CARD,'CARD') , (CASH, 'CASH')),
-        default = 'CARD'
-    )
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
-    p_date = models.DateTimeField()
-    card_no = models.BigIntegerField(null=True)
-    name_on_card = models.CharField(max_length=50, null=True)
-    exp_date = models.DateField(null=True)
+# class rsj_payment(models.Model):
+#     CARD = 'CARD'
+#     CASH = 'CASH'
+#     payment_id = models.AutoField(primary_key=True)
+#     method = models.CharField(
+#         max_length=4,
+#         choices = ((CARD,'CARD') , (CASH, 'CASH')),
+#         default = 'CARD'
+#     )
+#     amount = models.DecimalField(max_digits=7, decimal_places=2)
+#     p_date = models.DateTimeField()
+#     card_no = models.BigIntegerField(null=True)
+#     name_on_card = models.CharField(max_length=50, null=True)
+#     exp_date = models.DateField(null=True)
     
-    invoice_id = models.ForeignKey(rsj_invoice, on_delete=models.RESTRICT, db_column='invoice_id')
+#     invoice_id = models.ForeignKey(rsj_invoice, on_delete=models.RESTRICT, db_column='invoice_id')
 
-    class Meta:
-        db_table = 'rsj_payment'
+#     class Meta:
+#         db_table = 'rsj_payment'

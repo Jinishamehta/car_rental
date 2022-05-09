@@ -1,0 +1,7 @@
+{% extends 'main.html' %}
+{% block content %}
+{{serviceid}}
+{{total}}
+{{invoiceid}}
+<a href="{% url 'payment' var1=invoiceid %}">Make Payment</a>
+{% endblock %}

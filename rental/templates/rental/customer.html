@@ -1,13 +1,9 @@
-{% extends 'main.html' %}
+{% extends 'main_1.html' %}
 
 {% block content %}
-
-<div>
     {% for entry in data %}
         <p>{{ entry }}</p>
     {% endfor %}    
-
     <a href="{% url 'register_user' %}">Add Customer</a>
-</div>
 
 {% endblock content %}

@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+<main class="auth layout">
+    <div class="container">
+        <div>
+            <div class="layout__boxHeader">
+                <div class="layout__boxTitle">
+                    <h3>Book Service</h3>
+                </div>
+            </div>
+                <div class="layout__body">
+                    <form class="form" method="POST">
+                        {% csrf_token %}
+                        {% for f in form %}
+                            <div class="form__group">
+                            <label>{{f.label}}</label>
+                            {{f}}
+                            </div>
+                        {% endfor %}
+                            <div class="form__group">
+                            <label>Coupon code</label>
+                            <input type='text' name='coupon' />
+                            </div>
+
+                        <input type="submit" value="register" class="btn btn--main" />
+                    </form>
+                </div>
+        </div>
+    </div>
+</main>
+</div>        
+
+{% endblock %}

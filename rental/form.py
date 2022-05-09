@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
+from django import forms
 
 class LoginForm(ModelForm):
     class Meta:
@@ -36,40 +37,86 @@ class PlanForm(ModelForm):
 class  DisocuntForm(ModelForm):
     class Meta:
         model = rsj_discount
-        fields = '__all__'
+        fields = ['coupon_code', 'rate', 'start_date', 'end_date']
 
-class  IndForm(ModelForm):
-    class Meta:
-        model = rsj_ind_cust
-        fields = '__all__'
+    def clean(self):
+        if self.start_date >= self.end_date:
+            raise ValidationError('Start date is after end date')
 
-class  CorpForm(ModelForm):
-    class Meta:
-        model = rsj_corp_cust
-        fields = '__all__'
+# class  IndForm(ModelForm):
+#     class Meta:
+#         model = RsjIndCst
+#         fields = '__all__'
+
+# class  CorpForm(ModelForm):
+#     class Meta:
+#         model = RsjCorpCst
+#         fields = '__all__'
 
 class  CompanyForm(ModelForm):
     class Meta:
         model = rsj_company
         fields = '__all__'
 
-class  InvoiceForm(ModelForm):
-    class Meta:
-        model = rsj_invoice
-        fields = '__all__'
+# class  InvoiceForm(ModelForm):
+#     class Meta:
+#         model = rsj_invoice
+#         fields = '__all__'
 
-class  ServiceForm(ModelForm):
-    class Meta:
-        model = rsj_service
-        fields = '__all__'
+# class  ServiceForm(ModelForm):
+#     class Meta:
+#         model = rsj_service
+#         fields = '__all__'
 
 class  VehicleForm(ModelForm):
     class Meta:
         model = rsj_vehicle
         fields = '__all__'
 
-class  PaymentForm(ModelForm):
+# class  PaymentForm(ModelForm):
+#     class Meta:
+#         model = rsj_payment
+#         fields = '__all__'
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class ServiceForm(ModelForm):
+    class Meta:
+        model = rsj_service
+        fields = '__all__'
+        exclude = ['customer', 'coupon_code']
+        widgets = {
+            'start_date': DateInput(),
+            'end_date' : DateInput(),
+        }
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = rsj_customer
+        fields = '__all__'
+        exclude = ['username', 'customer_id', 'type']
+
+
+class CorpForm(ModelForm):
+    class Meta:
+        model = rsj_corp_cst
+        fields = '__all__'
+        exclude = ['customer']
+
+class IndForm(ModelForm):
+    class Meta:
+        model = rsj_ind_cst
+        fields = '__all__'
+        exclude = ['customer']
+
+class PaymentForm(ModelForm):
     class Meta:
         model = rsj_payment
+        exclude = ['invoice']
         fields = '__all__'
+        widgets = {
+            'exp_date': DateInput(),
+            'date' : DateInput(),
+        }
 
