@@ -210,12 +210,9 @@ permission = [
 customer_permission = [
 
 'view_rsj_company',
-
 'change_rsj_customer',
 'view_rsj_customer',
-
 'view_rsj_discount',
-
 'view_rsj_invoice',
 
 'view_rsj_location',

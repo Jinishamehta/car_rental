@@ -1,8 +1,20 @@
 {% extends 'main_1.html' %}
 
 {% block content %}
-
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                   Plan
+                 
+                   {% if request.user.is_staff %}
 <a href="{% url 'create_plan' %}">Add</a>
+{% endif %}
+</div>
+<div class="card-body">
 <table id="datatablesSimple">
     <thead>
         <tr>
@@ -10,18 +22,11 @@
             <th>Plan</th>
             <th>Cost</th>
             <th>Description</th>
+            {% if request.user.is_staff %}
             <th>Actions</th>
+            {% endif %}
         </tr>
     </thead>
-    <tfoot>
-        <tr>
-            <th>Plan ID</th>
-            <th>Plan</th>
-            <th>Cost</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </tfoot>
     <tbody>
         {% for entry in data %}
         <tr>
@@ -29,13 +34,18 @@
             <td>{{ entry.name }}</td>
             <td>{{ entry.cost}}</td>
             <td>{{ entry.description}}</td>
+            {% if request.user.is_staff %}
             <td>
                 <a href="{% url 'update_plan'  entry.plan_id  %}">Update</a>
                 <a href="{% url 'delete_plan' entry.plan_id  %}">Delete</a>
             </td>
+            {% endif %}
         </tr>
         {% endfor %}  
     </tbody>
 </table>
-
+</div>
+</div>
+</div>
+</main>
 {% endblock content %}

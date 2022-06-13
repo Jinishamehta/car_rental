@@ -2,11 +2,22 @@
 
 {% block content %}
 
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}    
-    <a href="{% url 'create_payment' %}">Make Payment</a>
+<div id="layoutSidenav_content">
+<main>
+<div class="container-fluid px-4">
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+<div class="card mb-4" >
+<div class="card-header">
+{{ title }}
 </div>
+<div class="card-body">
+<form class="form" method="POST" action="">
+{% csrf_token %}
+{{ form.as_p }}
+<input class="btn btn--main" type="submit" value="Pay" >
+</form>
+</div>
+</div>
+</main>
 
 {% endblock content %}

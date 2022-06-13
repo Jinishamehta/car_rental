@@ -1,0 +1,36 @@
+{% extends 'main_1.html' %}
+
+{% block content %}
+<div id="layoutSidenav_content">
+  <main>
+      <div class="container-fluid px-4">
+          -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+          <div class="card mb-4" >
+              <div class="card-header">
+                  {{ title }}
+              </div>
+          <div class="card-body">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- {{ form.as_p }}
+        <!-- <button type="submit">Register</button> -->
+        <h1>Registation</h1>
+      <div class="formcontainer">
+      <hr/>
+      <div class="container">
+        {{ form.as_p }}
+    </div>
+    <button type="submit">Register</button>
+
+    {% if not request.user.is_authenticated %}
+    <div class="container" style="background-color: #eee">
+        <label style="padding-left: 15px">
+        <a href="{% url 'login' %}">Sign In</a>
+      </div>
+      {%endif%}
+    </form>
+  </div>
+</div>
+</main>
+
+{% endblock content%}

@@ -1,0 +1,27 @@
+{% extends 'main_1.html' %}
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    Book Service
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {% if not request.user.is_staff %}
+                            <div class="form__group">
+                            <label>Coupon code</label>
+                            <input type='text' name='coupon' />
+                            </div>
+                        {% endif %}
+
+                        <input type="submit" value="register" class="btn btn-primary mb-2" />
+                    </form>
+                </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'main_1.html' %}
+{% block content%}
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    <h3>Service Details</h3>
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    <h3>Location Wise sales</h3>
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Location ID</th>
+                                <th>City</th>
+                                <th>Start Location</th>
+                                <th>Countof Service</th>
+                                <th>Sum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in loctotal %}
+                            <TR>
+                                <td>{{ row.0 }}</td>
+                                <td>{{ row.1 }}</td>
+                                <td>{{ row.2 }}</td>
+                                <td>{{ row.3 }}</td>
+                                <td>{{ row.4 }}</td>
+                            </TR>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Location Wise premium sales
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Location ID</th>
+                                <th>City</th>
+                                <th>Service Type</th>
+                                <th>Countof Service</th>
+                                <th>Sum</th>       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in locpremium %}
+                            <tr>
+                                <td>{{ row.0 }}</td>
+                                <td>{{ row.1 }}</td>
+                                <td>{{ row.2 }}</td>
+                                <td>{{ row.3 }}</td>
+                                <td>{{ row.4 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Top 5 Distances
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+    <tr>
+        <th>Service Id</th>
+        <th>Customer ID</th>
+        <th>Distance</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in top5dist %}
+    <TR>
+        <td>{{ row.0 }}</td>
+        <td>{{ row.1 }}</td>
+        <td>{{ row.2 }}</td>
+    </TR>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="card mb-4" >
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        class wise service count
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+    <tr>
+        <th>Class ID </th>
+        <th>Class name</th>
+        <th>Service Count</th>
+    </tr>
+</thead>
+<tbody>
+    {% for row in classservice %}
+    <TR>
+        <td>{{ row.0 }}</td>
+        <td>{{ row.1 }}</td>
+        <td>{{ row.2 }}</td>
+    </TR>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- <form method="POST">
+    {% csrf_token %}
+    
+    <select name="car">
+    {% for entry in cars %}
+        <option value="{{ entry.vin }}">{{ entry.model }}</option>
+    {% endfor %}
+    </select>
+    <input type="submit">
+</form> -->
+
+{% endblock %}

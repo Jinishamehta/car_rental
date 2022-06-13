@@ -1,13 +1,63 @@
 {% extends 'main_1.html' %}
 
 {% block content %}
-
-<div>
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %} 
-    
-    <a href="{% url 'create_service' %}">Add Serivce</a>
-</div>
-
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Services
+                    <a href="{% url 'create_service' %}" style="float:right">Add Serivce</a>
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Plate Number</th>
+                            <th>Class</th>
+                            <th>Pick Up</th>
+                            <th>Drop Off</th>
+                            <th>Service Plan</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in data %}
+                            <tr>
+                                <td>{{ entry.service_id }}</td>
+                                <td>{{ entry.customer_id.first_name }} {{ entry.customer_id.last_name }}</td>
+                                <td>{{ entry.vin.lpn }}</td>
+                                <td>{{ entry.vin.class_id.name }}</td>
+                                <td>{{ entry.start_location.street }}</td>
+                                <td>{{ entry.end_location_id.street }}</td>
+                                <td>{{ entry.service_type.name }}</td>
+                                <td>{% if entry.odometer_end == None %}
+                                    Active
+                                    {% else %}
+                                    Completed
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if entry.odometer_end != None%}
+                                    {% if a.coupon_code %}
+                                    <a href="{% url 'invoice' var1=entry.service_id var2=entry.coupon_code.coupon_code %}" class="btn btn--link">Generate Invoice</a> |
+                                    {% else %}
+                                    <a href="{% url 'invoice' var1=entry.service_id var2='0' %}" class="btn btn--link">Generate Invoice</a> |
+                                    {% endif %}
+                                    {% endif %}
+                                    <a href="{% url 'update_service' entry.service_id %}">Edit</a>
+        
+                                </td>
+                            </tr>   
+                            {% endfor %}   
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </main>
 {% endblock content %}

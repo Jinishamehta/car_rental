@@ -1,9 +1,19 @@
 {% extends 'main_1.html' %}
 
 {% block content %}
-
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Discount
 <a href="{% url 'create_discount' %}">Add</a>
-<table id="datatablesSimple">
+</div>
+<div class="card-body">
+    <table id="datatablesSimple">
+    
     <thead>
         <tr>
             <th>Coupon Code</th>
@@ -40,4 +50,8 @@
         {% endfor %}  
     </tbody>
 </table>
+</div>
+</div>
+</div>
+</main>
 {% endblock content %}

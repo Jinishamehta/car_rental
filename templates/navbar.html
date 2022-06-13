@@ -9,7 +9,7 @@
                 <nav>
                   <ul>
                     <li><div class="header__user"><p><a href="{% url 'home' %}">Home</a></p></div></li>
-                    <li><div class="header__user"><p><a href="{% url 'service' %}">Book Service</a></p></div></li>
+                    <li><div class="header__user"><p><a href="{% url 'create_service' %}">Book Service</a></p></div></li>
                     
                     {% if request.user.is_authenticated %}
                     <li><div class="header__user"><p><a href="{% url 'display' %}">My Services</a></p></div></li>

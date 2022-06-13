@@ -1,0 +1,27 @@
+{% extends 'main_1.html' %}
+
+{% block content %}
+<div id="layoutSidenav_content">
+  <main>
+      <div class="container-fluid px-4">
+          -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+          <div class="card mb-4" >
+              <div class="card-header">
+                  Login
+              </div>
+          <div class="card-body">
+    <form action=""  method="POST" >
+        {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+      <div class="container" style="background-color: #eee">
+        <label style="padding-left: 15px">
+        <a href="{% url 'register_user' %}">Sign Up</a>
+        <span class="password"><a href="{% url 'password_reset' %}"> Forgot password?</a></span>
+      </div>
+    </form>
+  </div>
+</div>
+</main>
+
+{% endblock content%}

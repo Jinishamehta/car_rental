@@ -1,11 +1,18 @@
 {% extends 'main_1.html' %}
 
 {% block content%}
-
-<form action="" method="POST">
-    {% csrf_token%}
-    <p>Are you sure you want to delete "{{ obj.name }}"?</p>
-    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
-    <input type="submit" value="Delete">
-</form>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" style="text-align: center;" >
+            Are you sure you want to delete "{{ obj.name }}"?
+            <form action="" method="POST">
+                {% csrf_token%}
+                <button onclick="{{request.META.HTTP_REFERER}}">Go Back</button>
+                <input type="submit" value="Delete">
+            </form>
+</div>
+</div>
+</main>
 {% endblock content%}

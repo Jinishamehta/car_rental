@@ -2,49 +2,75 @@
 
 {% block content %}
 
-<div class="card-header">
-    <i>Class</i>
-    <div class="topnav-right">
-    <a href="{% url 'create_class' %}">Add</a>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Class
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'create_class' %}" style="float: right;">Add</a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Rate Per Day</th>
+                                <th>Over Mileage Fees</th>
+                                <th>Daily Limit</th>
+                                {% if request.user.is_staff %}
+                                <th>Actions</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Class</th>
+                                <th>Rate Per Day</th>
+                                <th>Over Mileage Fees</th>
+                                <th>Daily Limit</th>
+                                {% if request.user.is_staff %}
+                                <th>Actions</th>
+                                {% endif %}
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for entry in data %}
+                            <tr>
+                                <td>{{ entry.name }}</td>
+                                <td>{{ entry.rate_per_day }}</td>
+                                <td>{{ entry.over_mileage_fee }}</td>
+                                <td>{{ entry.daily_limit }}</td>
+                                {% if request.user.is_staff %}
+                                <td>
+                                    <a href="{% url 'update_class'  entry.class_id %}">Update</a>
+                                    <a href="{% url 'delete_class' entry.class_id %}">Delete</a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}  
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
-</div>
-<div class="card-body">
-       
-        <table id="datatablesSimple">
-            <thead>
-                <tr>
-                    <th>Class</th>
-                    <th>Rate Per Day</th>
-                    <th>Over Mileage Fees</th>
-                    <th>Daily Limit</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>Class</th>
-                    <th>Rate Per Day</th>
-                    <th>Over Mileage Fees</th>
-                    <th>Daily Limit</th>
-                    <th>Actions</th>
-                </tr>
-            </tfoot>
-            <tbody>
-                {% for entry in data %}
-                <tr>
-                    <td>{{ entry.name }}</td>
-                    <td>{{ entry.rate_per_day }}</td>
-                    <td>{{ entry.over_mileage_fee }}</td>
-                    <td>{{ entry.daily_limit }}</td>
-                    <td>
-                        <a href="{% url 'update_class'  entry.class_id %}">Update</a>
-                        <a href="{% url 'delete_class' entry.class_id %}">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}  
-            </tbody>
-        </table>
-    </div>
-    </div>
     
 {% endblock content %}

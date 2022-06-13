@@ -1,74 +1,61 @@
 {% extends 'main_1.html' %}
 
 {% block content %}
-<div class="card mb-4">
-    <div class="card-header">
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li>
-                {{message}}
-            </li>
-            {% endfor %}
-        </ul>
-    
-        {% endif %}
-        <i class="fas fa-table me-1"></i>
-        Vehicle  <a href="{% url 'create_vehicle' %}">Add</a>
-    </div>
-    <div class="card-body">
-        <table id="datatablesSimple">
-            <thead>
-                <tr>
-                    <th>Plate Number</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Class</th>
-                    <th>Location</th>
-                    <th>Available</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>Plate Number</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Class</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </tfoot>
-            <tbody>
-                {% for entry in data %}
-                <tr>
-                    <td>{{ entry.lpn }}</td>
-                    <td>{{ entry.make }}</td>
-                    <td>{{ entry.model }}</td>
-                    <td>{{ entry.class_id.name }}</td>
-                    <td>{{ entry.location_id.street }}</td>
-                    <td>
-                        {% if entry.availability %}
-                        <h5>Available</h5>
-                        {% else %}
-                        <h5>In Service</h5>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'update_vehicle'  entry.lpn %}">Update</a>
-                        <a href="{% url 'delete_vehicle' entry.lpn %}">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}  
-            </tbody>
-        </table>
-       
-      
- 
-</div>
-<div>
-    
-</div>
-
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Cars
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'create_vehicle' %}">Add</a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Plate Number</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Class</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                {% if request.user.is_staff %}
+                                <th>Actions</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                      
+                        <tbody>
+                            {% for entry in data %}
+                            <tr>
+                                <td>{{ entry.lpn }}</td>
+                                <td>{{ entry.make }}</td>
+                                <td>{{ entry.model }}</td>
+                                <td>{{ entry.class_id.name }}</td>
+                                <td>{{ entry.location_id.street }}</td>
+                                <td>
+                                    {% if entry.availability %}
+                                    Available
+                                    {% else %}
+                                    In Service
+                                    {% endif %}
+                                </td>
+                                {% if request.user.is_staff %}
+                                <td>
+                                    <a href="{% url 'update_vehicle'  entry.lpn %}">Update</a>
+                                    <a href="{% url 'delete_vehicle' entry.lpn %}">Delete</a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}  
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock content %}

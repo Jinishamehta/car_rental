@@ -1,9 +1,57 @@
 {% extends 'main_1.html' %}
 
 {% block content %}
-    {% for entry in data %}
-        <p>{{ entry }}</p>
-    {% endfor %}    
-    <a href="{% url 'register_user' %}">Add Customer</a>
-
+          
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+                    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            <div class="card mb-4" >
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Customers
+                    <a href="{% url 'register_user' %}" style="float: right;">Add Customer</a>
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Customer Type</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Customer Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for entry in data %}
+                            <tr>
+                                <td>{{ entry.username }}</td>
+                                <td>{{ entry.first_name }} {{ entry.last_name }}</td>
+                                <td>{{ entry.email }}</td>
+                                <td>
+                                    {% if entry.customer_type == 'I' %}
+                                        Individual
+                                    {% else %}
+                                        Corporate
+                                    {% endif %}
+                                </td>
+                                <td>{{ entry.username }}</td>
+                            </tr>   
+                            {% endfor %}   
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock content %}
